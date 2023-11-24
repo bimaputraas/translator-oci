@@ -18,8 +18,8 @@ type TranslateAdvanceResp struct {
 }
 
 type TranslateAdvanceRespDetail struct {
-	TranslatedText         string `json:"translatedText"`
-	DetectedSourceLanguage string `json:"detectedLanguageCodetr"`
+	TranslatedText       string `json:"translatedText"`
+	DetectedLanguageCode string `json:"detectedLanguageCode"`
 }
 
 type TranslateData struct {

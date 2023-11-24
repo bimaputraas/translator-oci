@@ -114,7 +114,7 @@ func (*logicAdvance) Translate(r model.TranslateData) (*model.TranslateData, int
 	}
 
 	r.TranslatedText = dataResp.Data.Translations[0].TranslatedText
-	r.SourceType = dataResp.Data.Translations[0].DetectedSourceLanguage
+	r.SourceType = dataResp.Data.Translations[0].DetectedLanguageCode
 
 	return &r, raw, nil
 }
