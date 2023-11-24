@@ -2,11 +2,9 @@ package main
 
 import (
 	"encoding/json"
-	"fmt"
 	"io"
 	"log"
 	"net/http"
-	"net/url"
 	"os"
 
 	"github.com/gin-gonic/gin"
@@ -26,53 +24,48 @@ func main() {
 func BasicHandler(c *gin.Context) {
 	text := c.Query("text")
 	targetLanguage := c.Query("target")
-	encodedText := url.QueryEscape(text)
-
-	baseURL := fmt.Sprintf("https://translation.googleapis.com/language/translate/v2")
-	query := fmt.Sprintf("?q=%vtarget=%s&key=%s", &encodedText, targetLanguage, os.Getenv("APIKEY"))
-	url := fmt.Sprintf("%s%s", baseURL, query)
+	URL := "https://translation.googleapis.com/language/translate/v2"
 
 	client := &http.Client{}
-
-	req, err := http.NewRequest("GET", url, nil)
+	req, err := http.NewRequest("POST", URL, nil)
 	if err != nil {
-		log.Fatal(err)
+		c.JSON(500,BasicPayloadResponse{
+			Message: err.Error(),
+		})
 	}
 
+	q := req.URL.Query()
+    q.Add("key", os.Getenv("APIKEY"))
+    q.Add("target", targetLanguage)
+    q.Add("q", text)
+    q.Add("format", "text")
+    req.URL.RawQuery = q.Encode()
 	req.Header.Set("Content-Type", "application/json")
-
 	resp, err := client.Do(req)
 	if err != nil {
-		log.Fatal(err)
+		c.JSON(500,BasicPayloadResponse{
+			Message: err.Error(),
+		})
 	}
 	defer resp.Body.Close()
 
 	body, err := io.ReadAll(resp.Body)
 	if err != nil {
-		log.Fatal(err)
-	}
-
-	raw := string(body)
-
-	var translationResponse = new(BasicTranslationResponse)
-	err = json.Unmarshal(body, &translationResponse)
-	if err != nil {
-		c.JSON(http.StatusOK, PayloadResponse{
+		c.JSON(500,BasicPayloadResponse{
 			Message: err.Error(),
-			Data:    raw,
 		})
 	}
 
-	payloadResponse := PayloadResponse{
-		Message: "ok",
-		Data: BasicPayloadResponse{
-			SourceText:     text,
-			SourceType:     translationResponse.Data.Translations[0].DetectedSourceLanguage,
-			TranslatedText: translationResponse.Data.Translations[0].TranslatedText,
-			TranslatedType: targetLanguage,
-		},
+	var data interface{}
+	err = json.Unmarshal(body,&data)
+	if err != nil {
+		c.JSON(500,BasicPayloadResponse{
+			Message: err.Error(),
+			Data: data,
+		})
 	}
-	c.JSON(http.StatusOK, payloadResponse)
+
+	c.JSON(http.StatusOK, data)
 }
 
 // func main() {
