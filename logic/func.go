@@ -49,12 +49,10 @@ func (*logicBasic) Translate(r model.TranslateData) (*model.TranslateData, inter
 		return nil, raw, err
 	}
 
-	if len(dataResp.Data.Translations) < 1 {
-		return nil, raw, nil
+	if len(dataResp.Data.Translations) >= 1 {
+		r.TranslatedText = dataResp.Data.Translations[0].TranslatedText
+		r.SourceType = dataResp.Data.Translations[0].DetectedSourceLanguage
 	}
-
-	r.TranslatedText = dataResp.Data.Translations[0].TranslatedText
-	r.SourceType = dataResp.Data.Translations[0].DetectedSourceLanguage
 
 	return &r, raw, nil
 }
@@ -109,12 +107,10 @@ func (*logicAdvance) Translate(r model.TranslateData) (*model.TranslateData, int
 		return nil, raw, err
 	}
 
-	if len(dataResp.Data.Translations) < 1 {
-		return nil, raw, nil
+	if len(dataResp.Data.Translations) >= 1 {
+		r.TranslatedText = dataResp.Data.Translations[0].TranslatedText
+		r.SourceType = dataResp.Data.Translations[0].DetectedLanguageCode
 	}
-
-	r.TranslatedText = dataResp.Data.Translations[0].TranslatedText
-	r.SourceType = dataResp.Data.Translations[0].DetectedLanguageCode
 
 	return &r, raw, nil
 }
