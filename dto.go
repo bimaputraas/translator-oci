@@ -1,24 +1,24 @@
 package main
 
-type BasicTranslationResponse struct {
+type BasicResponse struct {
 	Data struct {
-		Translations []BasicTranslation `json:"translations"`
+		Translations []BasicResponseDetail `json:"translations"`
 	} `json:"data"`
 }
 
-type BasicTranslation struct {
+type BasicResponseDetail struct {
 	TranslatedText         string `json:"translatedText"`
 	DetectedSourceLanguage string `json:"detectedSourceLanguage"`
 }
 
-type BasicPayloadResponse struct {
+type BasicPayloadResponseDetail struct {
 	SourceText     string `json:"Source_text"`
 	SourceType     string `json:"Source_type"`
 	TranslatedText string `json:"translated_text"`
 	TranslatedType string `json:"translated_type"`
 }
 
-type PayloadResponse struct {
+type BasicPayloadResponse struct {
 	Message string      `json:"message"`
 	Data    interface{} `json:"data"`
 }
