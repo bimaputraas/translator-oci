@@ -63,6 +63,8 @@ func BasicHandler(c *gin.Context) {
 		})
 	}
 
+	fmt.Println(raw)
+
 	payloadResponse := PayloadResponse{
 		Message: "ok",
 		Data: BasicPayloadResponse{
