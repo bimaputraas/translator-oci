@@ -10,10 +10,10 @@ type logicBasic struct{}
 
 type logicAdvance struct{}
 
-func InitLogicBasic() *logicBasic {
+func InitLogicBasic() Logic {
 	return &logicBasic{}
 }
 
-func InitLogicAdvance() *logicAdvance {
+func InitLogicAdvance() Logic {
 	return &logicAdvance{}
 }
